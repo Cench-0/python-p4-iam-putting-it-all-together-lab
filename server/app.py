@@ -83,15 +83,22 @@ class Logout(Resource):
 class RecipeIndex(Resource):
     def get(self):
         user = User.query.filter(User.id == session['user_id']).first()
+        if not user:
+            return {'error': '401 Unauthorized'}, 401
         return [recipe.to_dict() for recipe in user.recipes], 200
     
     def post(self):
+        if not session.get('user_id'):
+            return {'error': '401 Unauthorized'}, 401
 
         request_json = request.get_json()
 
         title = request_json['title']
         instructions = request_json['instructions']
         minutes_to_complete = request_json['minutes_to_complete']
+
+        if not title or not instructions or len(instructions) < 50:
+            return {'error': '422 Unprocessable Entity'}, 422
 
         try:
 

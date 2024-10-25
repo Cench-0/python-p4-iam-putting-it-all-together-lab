@@ -3,6 +3,12 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_serializer import SerializerMixin
 from config import db, bcrypt
 
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
+
+
+
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
